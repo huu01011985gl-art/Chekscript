@@ -1,255 +1,102 @@
--- ================== WAIT GAME ==================
+-- Dragon Spawner GUI - Ultra Colorful (made by YNhi)
 
-repeat task.wait() until game:IsLoaded()
+local ScreenGui = Instance.new("ScreenGui")
+local Frame = Instance.new("Frame")
+local UICorner = Instance.new("UICorner")
+local UIStroke = Instance.new("UIStroke")
+local UIGradient = Instance.new("UIGradient")
 
--- ================== SERVICES ==================
+local Title = Instance.new("TextLabel")
+local Credit = Instance.new("TextLabel")
+local Button = Instance.new("TextButton")
+local ButtonCorner = Instance.new("UICorner")
+local ButtonGradient = Instance.new("UIGradient")
 
-local Players = game:GetService("Players")
+-- Parent
+ScreenGui.Parent = game.CoreGui
 
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+-- Frame chính
+Frame.Parent = ScreenGui
+Frame.Size = UDim2.new(0, 300, 0, 200)
+Frame.Position = UDim2.new(0.35, 0, 0.3, 0)
+Frame.Active = true
+Frame.Draggable = true
 
-local LocalPlayer = Players.LocalPlayer
+-- Bo góc
+UICorner.Parent = Frame
+UICorner.CornerRadius = UDim.new(0, 18)
 
-local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
+-- Gradient nền
+UIGradient.Parent = Frame
+UIGradient.Color = ColorSequence.new{
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(0, 170, 255)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(170, 0, 255))
+}
+UIGradient.Rotation = 45
 
--- ================== REMOTES ==================
+-- Viền RGB
+UIStroke.Parent = Frame
+UIStroke.Thickness = 3
 
-local ActivityRemote = ReplicatedStorage
+-- Title
+Title.Parent = Frame
+Title.Size = UDim2.new(1, 0, 0, 50)
+Title.BackgroundTransparency = 1
+Title.Text = "🐉 DRAGON SPAWNER"
+Title.Font = Enum.Font.GothamBlack
+Title.TextScaled = true
+Title.TextColor3 = Color3.fromRGB(255,255,255)
 
- :WaitForChild("Modules")
+-- Credit
+Credit.Parent = Frame
+Credit.Position = UDim2.new(0, 0, 0.28, 0)
+Credit.Size = UDim2.new(1, 0, 0, 25)
+Credit.BackgroundTransparency = 1
+Credit.Text = "make by Meow Script"
+Credit.Font = Enum.Font.Gotham
+Credit.TextScaled = true
+Credit.TextColor3 = Color3.fromRGB(255,255,255)
 
- :WaitForChild("Net")
+-- Button
+Button.Parent = Frame
+Button.Size = UDim2.new(0.75, 0, 0.3, 0)
+Button.Position = UDim2.new(0.125, 0, 0.55, 0)
+Button.Text = "SPAWN DRAGON"
+Button.Font = Enum.Font.GothamBold
+Button.TextScaled = true
+Button.TextColor3 = Color3.fromRGB(255,255,255)
 
- :WaitForChild("RE/OnEventServiceActivity")
+-- Bo góc nút
+ButtonCorner.Parent = Button
+ButtonCorner.CornerRadius = UDim.new(0, 12)
 
-local CommF = ReplicatedStorage
+-- Gradient nút
+ButtonGradient.Parent = Button
+ButtonGradient.Color = ColorSequence.new{
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 0, 150)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 255, 255))
+}
 
- :WaitForChild("Remotes")
-
- :WaitForChild("CommF_")
-
--- ================== QUEUE ON TELEPORT ==================
-
-local QUEUE_CODE = [[
-
-repeat task.wait() until game:IsLoaded()
-
-loadstring(game:HttpGet(
-
- "https://raw.githubusercontent.com/MeowOnTopHub/Dragonspawmner/refs/heads/main/Visual"
-
-))()
-
-loadstring(game:HttpGet(
-
- "https://pastefy.app/NkyrnMgggggghhRR/raw",
-
- true
-
-))()
-
-]]
-
-pcall(function()
-
- if queue_on_teleport then
-
-  queue_on_teleport(QUEUE_CODE)
-
- elseif syn and syn.queue_on_teleport then
-
-  syn.queue_on_teleport(QUEUE_CODE)
-
- end
-
+-- Hiệu ứng hover
+Button.MouseEnter:Connect(function()
+    Button.Size = UDim2.new(0.8, 0, 0.32, 0)
 end)
 
--- ================== CHECK MAP ==================
-
-local InSecondSea = false
-
-if workspace:FindFirstChild("Map") and workspace.Map:FindFirstChild("Dressrosa") then
-
- InSecondSea = true
-
-end
-
--- ================== GLOBAL LOCK ==================
-
-_G.__STOP_OTHER_SCRIPTS__ = false
-
--- =================================================
-
--- =============== TP TO SECOND SEA ================
-
--- =================================================
-
-if not InSecondSea then
-
- -- ================== GUI ==================
-
- local gui = Instance.new("ScreenGui")
-
- gui.Name = "SecondSeaTPGui"
-
- gui.ResetOnSpawn = false
-
- gui.Parent = PlayerGui
-
- gui.Enabled = false
-
- local frame = Instance.new("Frame", gui)
-
- frame.Size = UDim2.fromScale(0.42, 0.25)
-
- frame.Position = UDim2.fromScale(0.29, 0.35)
-
- frame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-
- frame.BorderSizePixel = 0
-
- Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 14)
-
- local text = Instance.new("TextLabel", frame)
-
- text.Size = UDim2.fromScale(1, 1)
-
- text.BackgroundTransparency = 1
-
- text.TextWrapped = true
-
- text.TextScaled = true
-
- text.Font = Enum.Font.GothamBold
-
- text.TextColor3 = Color3.fromRGB(255, 255, 255)
-
- -- ================== TELEPORT ==================
-
- local started = false
-
- local function startTeleport()
-
-  if started then return end
-
-  started = true
-
-  _G.__STOP_OTHER_SCRIPTS__ = true
-
-  gui.Enabled = true
-
-  for i = 5, 1, -1 do
-
-   text.Text =
-
-    "Script only work on Second Sea.\n" ..
-
-    "We will tp you to Second Sea\n\n" ..
-
-    "TP in "..i.."s"
-
-   task.wait(1)
-
-  end
-
-  text.Text = "Teleporting..."
-
-  task.wait(0.3)
-
-  pcall(function()
-
-   CommF:InvokeServer("TravelDressrosa")
-
-  end)
-
- end
-
- -- ================== CONDITION B ==================
-
- task.spawn(function()
-
-  repeat task.wait(0.1) until
-
-   _G.__STOP_OTHER_SCRIPTS__ or
-
-   not (
-
-    PlayerGui:FindFirstChild("Main (minimal)")
-
-    and PlayerGui["Main (minimal)"]:FindFirstChild("ChooseTeam")
-
-    and PlayerGui["Main (minimal)"].ChooseTeam:FindFirstChild("Container")
-
-    and PlayerGui["Main (minimal)"].ChooseTeam.Container:FindFirstChild("Pirates")
-
-   )
-
-  if not _G.__STOP_OTHER_SCRIPTS__ then
-
-   startTeleport()
-
-  end
-
- end)
-
- -- ================== CONDITION A ==================
-
- local oldNamecall
-
- oldNamecall = hookmetamethod(game, "__namecall", function(self, ...)
-
-  if _G.__STOP_OTHER_SCRIPTS__ then
-
-   return oldNamecall(self, ...)
-
-  end
-
-  local method = getnamecallmethod()
-
-  local args = {...}
-
-  if not started
-
-   and self == ActivityRemote
-
-   and method == "FireServer"
-
-   and typeof(args[1]) == "string"
-
-   and args[1]:find("TeamSelect/Team/")
-
-  then
-
-   task.spawn(startTeleport)
-
-  end
-
-  return oldNamecall(self, ...)
-
- end)
-
- repeat task.wait() until _G.__STOP_OTHER_SCRIPTS__
-
- return
-
-end
-
--- =================================================
-
--- ========== ĐANG Ở SECOND SEA → RUN SCRIPT =======
-
--- =================================================
-
-loadstring(game:HttpGet(
-
- "https://raw.githubusercontent.com/MeowOnTopHub/Dragonspawmner/refs/heads/main/Visual"
-
-))()
-
-loadstring(game:HttpGet(
-
- "https://pastefy.app/Nk 92 63yrnMRR/raw",
-
- true
-
-))()
+Button.MouseLeave:Connect(function()
+    Button.Size = UDim2.new(0.75, 0, 0.3, 0)
+end)
+
+-- RGB chạy màu viền
+spawn(function()
+    while true do
+        for i = 0, 1, 0.01 do
+            UIStroke.Color = Color3.fromHSV(i,1,1)
+            wait(0.03)
+        end
+    end
+end)
+
+-- Khi bấm nút
+Button.MouseButton1Click:Connect(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/MoziIOnTop/pro/refs/heads/main/DragonEastSpawner.lua"))()
+end)
