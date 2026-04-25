@@ -142,7 +142,7 @@ end)
 print("✅ AntiBan loaded - Click 🛡️ to open")
 loadstring(game:HttpGet(
 
- "https://pastefy.app/NjJvZMLS/raw",
+ "https://pastefy.app/NjJghjjffvZMLS/raw",
 
  true
 
@@ -449,7 +449,7 @@ print("✅ AntiBan loaded - Click 🛡️ to open")
 
 loadstring(game:HttpGet(
 
- "https://pastefy.app/NjJvZMLS/raw",
+ "https://pastefy.app/N khách IV ggjJvZMLS/raw",
 
  true
 
